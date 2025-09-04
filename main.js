@@ -10,13 +10,25 @@ function ensureSharedDir() {
 
 function createWindow() {
   const win = new BrowserWindow({
-    width: 60, height: 60,
-    frame: false, transparent: true, alwaysOnTop: true,
-    resizable: false, skipTaskbar: true,
-    webPreferences: { nodeIntegration: true, contextIsolation: false }
+    width: 400,
+    height: 300,
+    x: undefined,
+    y: undefined,
+    frame: false,
+    transparent: true,
+    alwaysOnTop: true,
+    resizable: true,
+    skipTaskbar: true,
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false
+    }
   });
+
   win.loadFile('index.html');
+  win.center(); // Optional: center the window on launch
 }
+
 
 app.whenReady().then(() => {
   ensureSharedDir();
