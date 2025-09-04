@@ -1,3 +1,7 @@
+const chokidar = require('chokidar');
+const fs = require('fs');
+const path = require('path');
+const SHARED_DIR = 'C:\\ProgramData\\FruitBasket';
 const { ipcRenderer } = require('electron');
 const icon = document.getElementById('basket-icon');
 const panel = document.getElementById('basket-panel');
