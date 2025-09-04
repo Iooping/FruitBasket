@@ -8,20 +8,30 @@ const SHARED_DIR = 'C:\\ProgramData\\FruitBasket';
 
 // Function to create the main application window
 const createWindow = () => {
-    const win = new BrowserWindow({
-        width: 400,
-        height: 300,
-        frame: false,
-        transparent: true,
-        alwaysOnTop: true,
-        resizable: true,
-        skipTaskbar: true,
-        webPreferences: {
-            preload: path.join(__dirname, 'preload.js'),
-            nodeIntegration: false,
-            contextIsolation: true
-        }
-    });
+//    const win = new BrowserWindow({
+//        width: 400,
+//        height: 300,
+ //       frame: false,
+ //       transparent: true,
+ //       alwaysOnTop: true,
+ //       resizable: true,
+//        skipTaskbar: true,
+//        webPreferences: {
+ //           preload: path.join(__dirname, 'preload.js'),
+ //           nodeIntegration: false,
+ //           contextIsolation: true
+  //      }
+  //  });
+    // In main.js
+const win = new BrowserWindow({
+    width: 800,
+    height: 600,
+    webPreferences: {
+        preload: path.join(__dirname, 'preload.js'),
+        nodeIntegration: false,
+        contextIsolation: true
+    }
+});
 
     win.loadFile('index.html');
     win.center();
