@@ -1,0 +1,17 @@
+{
+  "name": "fruitbasket",
+  "version": "0.1.0",
+  "main": "main.js",
+  "scripts": {
+    "dev": "electron .",
+    "dist": "electron-builder --win nsis"
+  },
+  "dependencies": {
+    "chokidar": "^3.5.0",
+    "sqlite3": "^5.1.0",
+    "electron": "^26.0.0"
+  },
+  "devDependencies": {
+    "electron-builder": "^24.0.0"
+  }
+}
