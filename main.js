@@ -1,61 +1,79 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
-const fs = require('fs'), path = require('path');
+const path = require('path');
+const fs = require('fs');
+const chokidar = require('chokidar');
+
+// Define the shared directory path
 const SHARED_DIR = 'C:\\ProgramData\\FruitBasket';
 
-function ensureSharedDir() {
-  if (!fs.existsSync(SHARED_DIR)) {
-    fs.mkdirSync(SHARED_DIR, { recursive: true });
-  }
-}
-
-function createWindow() {
-  const win = new BrowserWindow({
-    width: 400,
-    height: 300,
-    x: undefined,
-    y: undefined,
-    frame: false,
-    transparent: true,
-    alwaysOnTop: true,
-    resizable: true,
-    skipTaskbar: true,
-    webPreferences: {
-      nodeIntegration: true,
-      contextIsolation: false
-    }
-  });
-
-  win.loadFile('index.html');
-  win.center(); // Optional: center the window on launch
-}
-
-
-app.whenReady().then(() => {
-  ensureSharedDir();
-  createWindow();
-});
-
-ipcMain.handle('copy-file', async (event, srcPath) => {
-  const fileName = path.basename(srcPath);
-  const dest = path.join(SHARED_DIR, fileName);
-  await copyWithProgress(srcPath, dest, pct => {
-    event.sender.send('copy-progress', { fileName, pct });
-  });
-  return { success: true, fileName };
-});
-
-function copyWithProgress(src, dest, onProgress) {
-  return new Promise((resolve, reject) => {
-    const total = fs.statSync(src).size;
-    let transferred = 0;
-    const reader = fs.createReadStream(src);
-    const writer = fs.createWriteStream(dest);
-    reader.on('data', chunk => {
-      transferred += chunk.length;
-      onProgress(transferred / total);
+// Function to create the main application window
+const createWindow = () => {
+    const win = new BrowserWindow({
+        width: 400,
+        height: 300,
+        frame: false,
+        transparent: true,
+        alwaysOnTop: true,
+        resizable: true,
+        skipTaskbar: true,
+        webPreferences: {
+            preload: path.join(__dirname, 'preload.js'),
+            nodeIntegration: false,
+            contextIsolation: true
+        }
     });
-    reader.pipe(writer);
-    writer.on('finish', resolve);
-    writer.on('error', reject);
-  });
-}
+
+    win.loadFile('index.html');
+    win.center();
+    // Open DevTools for debugging
+    // win.webContents.openDevTools();
+};
+
+// Create the shared directory if it doesn't exist
+const createSharedDir = () => {
+    if (!fs.existsSync(SHARED_DIR)) {
+        console.log(`Creating directory: ${SHARED_DIR}`);
+        fs.mkdirSync(SHARED_DIR, { recursive: true });
+    }
+};
+
+// Application lifecycle events
+app.whenReady().then(() => {
+    createSharedDir();
+    createWindow();
+
+    app.on('activate', () => {
+        if (BrowserWindow.getAllWindows().length === 0) {
+            createWindow();
+        }
+    });
+});
+
+app.on('window-all-closed', () => {
+    if (process.platform !== 'darwin') {
+        app.quit();
+    }
+});
+
+// Set up IPC for file watching
+ipcMain.on('start-file-watcher', (event) => {
+    console.log('Starting file watcher...');
+
+    // Initial file scan
+    fs.readdir(SHARED_DIR, (err, files) => {
+        if (err) {
+            console.error('Error reading shared directory:', err);
+            return;
+        }
+        event.sender.send('initial-file-list', files);
+    });
+
+    // Watch for new files
+    const watcher = chokidar.watch(SHARED_DIR, { ignoreInitial: true });
+    watcher.on('add', (filePath) => {
+        const filename = path.basename(filePath);
+        event.sender.send('new-file-added', filename);
+    });
+
+    console.log(`Watching directory: ${SHARED_DIR}`);
+});
