@@ -1,5 +1,6 @@
 {
   "name": "fruitbasket",
+<<<<<<< HEAD
   "version": "0.1.0",
 - "main": "index.js",
 + "main": "main.js",
@@ -16,5 +17,27 @@
   },
   "devDependencies": {
 +   "electron-builder": "^24.0.0"
+=======
+  "version": "1.0.0",
+  "description": "A cross-profile file-sharing “fruit basket” for Windows that lives as a floating, glassmorphic overlay. Drag files (up to 50 GB) into the basket and any signed-in user sees and can retrieve them.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Iooping/FruitBasket.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Iooping/FruitBasket/issues"
+  },
+  "homepage": "https://github.com/Iooping/FruitBasket#readme",
+  "devDependencies": {
+    "electron-builder": "^26.0.12"
+>>>>>>> 55dd8bd (Add Electron scaffold: main, renderer, HTML no UI logic)
   }
 }
