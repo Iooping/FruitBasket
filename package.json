@@ -1,17 +1,22 @@
 {
   "name": "fruitbasket",
-  "version": "0.1.0",
+  "version": "1.0.0",
+  "description": "An Electron app for real-time file sharing.",
   "main": "main.js",
   "scripts": {
-    "dev": "electron .",
+    "start": "electron .",
+    "dev": "npm start",
     "dist": "electron-builder --win nsis"
   },
+  "keywords": [],
+  "author": "Iooping",
+  "license": "ISC",
   "dependencies": {
-    "electron": "^26.0.0",
-    "chokidar": "^3.5.0",
-    "sqlite3": "^5.1.0"
+    "chokidar": "^3.5.3",
+    "electron": "^25.0.0",
+    "sqlite3": "^5.1.6"
   },
   "devDependencies": {
-    "electron-builder": "^24.0.0"
+    "electron-builder": "^23.6.0"
   }
 }
