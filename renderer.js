@@ -30,3 +30,23 @@ dropZone.addEventListener('drop', async e => {
 ipcRenderer.on('copy-progress', (_, { fileName, pct }) => {
   console.log(`${fileName}: ${Math.round(pct * 100)}%`);
 });
+function refreshFileList() {
+  fileList.innerHTML = '';
+  const files = fs.readdirSync(SHARED_DIR);
+  files.forEach(file => {
+    const li = document.createElement('li');
+    li.textContent = file;
+    fileList.appendChild(li);
+  });
+}
+
+// Initial load
+refreshFileList();
+
+// Watch for new files
+chokidar.watch(SHARED_DIR, { ignoreInitial: true }).on('add', filePath => {
+  const fileName = path.basename(filePath);
+  const li = document.createElement('li');
+  li.textContent = fileName;
+  fileList.appendChild(li);
+});
