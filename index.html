@@ -1,17 +1,41 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <title>FruitBasket</title>
-  <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8">
+    <title>FruitBasket</title>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
+    <style>
+        body {
+            background-color: rgba(0, 0, 0, 0.5);
+            color: #fff;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #fileList {
+            list-style-type: none;
+            padding: 0;
+            margin-top: 10px;
+            width: 100%;
+        }
+
+        #fileList li {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 8px;
+            margin-bottom: 5px;
+            border-radius: 4px;
+        }
+    </style>
 </head>
 <body>
-  <div id="basket-icon"></div>
-  <div id="basket-panel">
-    <h3>Your Basket</h3>
-    <div id="drop-zone">Drop files here</div>
-    <ul id="file-list"></ul>
-  </div>
-  <script src="renderer.js"></script>
+    <h1>FruitBasket</h1>
+    <ul id="fileList"></ul>
+    
+    <script src="./renderer.js"></script>
 </body>
 </html>
