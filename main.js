@@ -3,19 +3,12 @@ const path = require('path');
 const fs = require('fs');
 const chokidar = require('chokidar');
 
-// Define the shared directory path
 const SHARED_DIR = 'C:\\ProgramData\\FruitBasket';
 
-// Function to create the main application window
 const createWindow = () => {
   const win = new BrowserWindow({
-    width: 400,
-    height: 300,
-    frame: false,
-    transparent: true,
-    alwaysOnTop: true,
-    resizable: true,
-    skipTaskbar: true,
+    width: 800,
+    height: 600,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       nodeIntegration: false,
@@ -24,11 +17,9 @@ const createWindow = () => {
   });
 
   win.loadFile('index.html');
-  win.center();
-  // win.webContents.openDevTools();
+  win.webContents.openDevTools(); // This is crucial for debugging
 };
 
-// Create the shared directory if it doesn't exist
 const createSharedDir = () => {
   if (!fs.existsSync(SHARED_DIR)) {
     console.log(`Creating directory: ${SHARED_DIR}`);
@@ -36,7 +27,6 @@ const createSharedDir = () => {
   }
 };
 
-// Application lifecycle events
 app.whenReady().then(() => {
   createSharedDir();
   createWindow();
@@ -54,11 +44,9 @@ app.on('window-all-closed', () => {
   }
 });
 
-// Set up IPC for file watching
 ipcMain.on('start-file-watcher', (event) => {
   console.log('Starting file watcher...');
 
-  // Read all existing files in the directory and send the list to the renderer
   fs.readdir(SHARED_DIR, (err, files) => {
     if (err) {
       console.error('Error reading shared directory:', err);
@@ -67,7 +55,6 @@ ipcMain.on('start-file-watcher', (event) => {
     event.sender.send('initial-file-list', files);
   });
 
-  // Watch for new files and send updates to the renderer
   const watcher = chokidar.watch(SHARED_DIR, { ignoreInitial: true });
   watcher.on('add', (filePath) => {
     const filename = path.basename(filePath);
